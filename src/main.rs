@@ -1,12 +1,13 @@
-use crate::config::Config;
-use crate::routes::hello_route;
+use crate::helpers::config::Config;
+use crate::routes::ping::ping_route;
+use crate::routes::reservation::reserve_ticket_route;
+use crate::routes::users::sign_up_route;
 use actix_web::web::Data;
 use actix_web::{App, HttpServer};
 use dotenv::dotenv;
 use tokio_postgres::NoTls;
 use tracing_subscriber::EnvFilter;
 
-mod config;
 mod helpers;
 mod routes;
 mod services;
@@ -26,7 +27,9 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(Data::new(pool.clone()))
-            .service(hello_route)
+            .service(ping_route)
+            .service(reserve_ticket_route)
+            .service(sign_up_route)
     })
     .bind(config.server_addr.clone())?
     .run()
