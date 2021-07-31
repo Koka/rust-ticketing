@@ -2,6 +2,7 @@ use deadpool_postgres::Pool;
 use eyre::Result;
 use serde::Serialize;
 use std::sync::Arc;
+use tracing::instrument;
 
 #[derive(Serialize)]
 pub struct ReservedTicket {
@@ -9,6 +10,7 @@ pub struct ReservedTicket {
     price_cents: u32,
 }
 
+#[instrument(skip(db_pool))]
 pub async fn reserve_tickets(
     db_pool: Arc<Pool>,
     ticket_type_id: i32,

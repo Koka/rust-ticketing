@@ -1,7 +1,9 @@
 use deadpool_postgres::Pool;
 use eyre::{eyre, Result};
 use std::sync::Arc;
+use tracing::instrument;
 
+#[instrument(skip(db_pool))]
 pub async fn create_user(db_pool: Arc<Pool>, name: &String) -> Result<i64> {
     let db_pool = db_pool.clone();
     let mut client = db_pool.get().await?;

@@ -1,7 +1,9 @@
 use deadpool_postgres::Pool;
 use eyre::Result;
 use std::sync::Arc;
+use tracing::instrument;
 
+#[instrument(skip(db_pool))]
 pub async fn ping(db_pool: Arc<Pool>) -> Result<String> {
     let db_pool = db_pool.clone();
     let client = db_pool.get().await?;
