@@ -1,9 +1,10 @@
 use eyre::Report;
 use serde::Deserialize;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct Config {
     pub server_addr: String,
+    pub jwt_secret: String,
     pub pg: deadpool_postgres::Config,
 }
 
