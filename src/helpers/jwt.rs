@@ -1,4 +1,4 @@
-use crate::helpers::actix::wrap_err;
+use crate::helpers::error::ActixError;
 use crate::helpers::config::Config;
 use actix_web::dev::ServiceRequest;
 use actix_web::web::Data;
@@ -44,7 +44,10 @@ pub async fn token_validator(
     req: ServiceRequest,
     credentials: BearerAuth,
 ) -> Result<ServiceRequest> {
-    let config: &Data<Config> = wrap_err(req.app_data().ok_or_else(|| eyre!("No config!")))?;
+    let config: &Data<Config> = req.app_data().ok_or_else(|| {
+        let e: ActixError = eyre!("No config!").into();
+        e
+    })?;
 
     let token = credentials.token();
     let validation = Validation {
